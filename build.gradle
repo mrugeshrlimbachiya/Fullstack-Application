@@ -1,0 +1,57 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.4.1'
+	id 'io.spring.dependency-management' version '1.1.5'
+}
+
+group = 'com.myGraphQL'
+version = '1.0.0'
+description = 'Employee GraphQL API'
+
+java {
+	sourceCompatibility = JavaVersion.VERSION_21
+	targetCompatibility = JavaVersion.VERSION_21
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	// Spring Boot Starters
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-graphql'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	implementation 'org.springframework.boot:spring-boot-starter-cache'
+
+	// PostgreSQL Driver
+	runtimeOnly 'org.postgresql:postgresql'
+
+	// JWT
+	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
+	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+
+	// Lombok
+	compileOnly 'org.projectlombok:lombok:1.18.32'
+	annotationProcessor 'org.projectlombok:lombok:1.18.32'
+	testCompileOnly 'org.projectlombok:lombok:1.18.32'
+	testAnnotationProcessor 'org.projectlombok:lombok:1.18.32'
+
+	// Caffeine Cache
+	implementation 'com.github.ben-manes.caffeine:caffeine'
+
+	// GraphQL Extended Scalars
+	implementation 'com.graphql-java:graphql-java-extended-scalars:21.0'
+
+	// Testing
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.springframework.graphql:spring-graphql-test'
+	testImplementation 'org.springframework.security:spring-security-test'
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}

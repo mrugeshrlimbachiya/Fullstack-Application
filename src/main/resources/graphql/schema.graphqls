@@ -1,0 +1,90 @@
+type Query {
+    # Get all employees with optional filters
+    employees(filter: EmployeeFilter, page: Int = 0, size: Int = 10, sortBy: String = "id", sortDir: String = "ASC"): EmployeePage!
+
+    # Get single employee by ID
+    employee(id: ID!): Employee
+
+    # Get current authenticated user info
+    me: User
+}
+
+type Mutation {
+    # Authentication
+    login(username: String!, password: String!): AuthResponse!
+    register(username: String!, password: String!, role: RoleType!): AuthResponse!
+
+    # Employee CRUD operations (Admin only for add/delete, Admin/Owner for update)
+    addEmployee(input: EmployeeInput!): Employee!
+    updateEmployee(id: ID!, input: EmployeeInput!): Employee!
+    deleteEmployee(id: ID!): Boolean!
+
+    # Attendance marking (Employee can mark their own, Admin can mark any)
+    markAttendance(employeeId: ID!, date: String!, present: Boolean!): Employee!
+}
+
+type Employee {
+    id: ID!
+    name: String!
+    age: Int!
+    class: String!
+    subjects: [String!]!
+    attendance: [AttendanceRecord!]!
+    email: String
+    phone: String
+    createdAt: String!
+    updatedAt: String!
+}
+
+type AttendanceRecord {
+    date: String!
+    present: Boolean!
+}
+
+type User {
+    id: ID!
+    username: String!
+    role: RoleType!
+    employeeId: ID
+}
+
+type AuthResponse {
+    token: String!
+    user: User!
+}
+
+type EmployeePage {
+    content: [Employee!]!
+    pageInfo: PageInfo!
+}
+
+type PageInfo {
+    pageNumber: Int!
+    pageSize: Int!
+    totalElements: Int!
+    totalPages: Int!
+    hasNext: Boolean!
+    hasPrevious: Boolean!
+}
+
+input EmployeeInput {
+    name: String!
+    age: Int!
+    class: String!
+    subjects: [String!]!
+    email: String
+    phone: String
+}
+
+input EmployeeFilter {
+    name: String
+    minAge: Int
+    maxAge: Int
+    class: String
+    subject: String
+}
+
+enum RoleType {
+    ADMIN
+    EMPLOYEE
+}
