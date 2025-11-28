@@ -21,20 +21,20 @@ A complete GraphQL API built with Spring Boot for managing employees with role-b
 
 ## 📋 Prerequisites
 
-- Java 17 or higher
-- Maven 3.6+
-- Docker and Docker Compose
+- Java 21
+- Gradle (wrapper included, no manual installation required)
+- Docker
 - Postman (for API testing)
 
 ## 🛠️ Tech Stack
 
-- **Backend**: Spring Boot 3.2
+- **Backend**: Spring Boot 3.4.1
 - **GraphQL**: Spring GraphQL
 - **Database**: PostgreSQL 15
 - **Security**: Spring Security + JWT
 - **Cache**: Caffeine
 - **ORM**: Spring Data JPA + Hibernate
-- **Build Tool**: Maven
+- **Build Tool**: Gradle
 - **Containerization**: Docker
 
 ## 📁 Project Structure
@@ -57,9 +57,8 @@ employee-graphql-api/
 │   │       └── graphql/
 │   │           └── schema.graphqls  # GraphQL schema
 │   └── test/                        # Test classes
-├── docker-compose.yml               # Docker services
 ├── Dockerfile                       # Application container
-├── pom.xml                          # Maven dependencies
+├── build.gradle                     # Gradle build file
 └── README.md
 ```
 
@@ -69,18 +68,14 @@ employee-graphql-api/
 
 1. **Clone the repository**
 ```bash
-git clone <repository-url>
+git clone https://github.com/mrugeshrlimbachiya/Fullstack-Application.git
 cd employee-graphql-api
 ```
 
-2. **Build and run with Docker Compose**
-```bash
-docker-compose up --build
-```
 
 The application will be available at:
-- GraphQL API: http://localhost:8080/graphql
-- GraphiQL Interface: http://localhost:8080/graphiql
+- GraphQL API: http://localhost:8082/graphql
+- GraphiQL Interface: http://localhost:8082/graphiql
 - PostgreSQL: localhost:5432
 
 ### Option 2: Running Locally
@@ -142,7 +137,7 @@ mutation {
   addEmployee(input: {
     name: "John Doe"
     age: 30
-    class: "Engineering"
+    className: "Engineering"
     subjects: ["Java", "Spring Boot", "GraphQL"]
     email: "john@example.com"
     phone: "1234567890"
@@ -150,7 +145,7 @@ mutation {
     id
     name
     age
-    class
+    className
     subjects
     email
     phone
@@ -168,7 +163,7 @@ query {
       id
       name
       age
-      class
+      className
       subjects
       email
     }
@@ -193,7 +188,7 @@ query {
       name: "John"
       minAge: 25
       maxAge: 40
-      class: "Engineering"
+      className: "Engineering"
     }
     page: 0
     size: 10
@@ -202,7 +197,7 @@ query {
       id
       name
       age
-      class
+      className
     }
     pageInfo {
       totalElements
@@ -219,7 +214,7 @@ query {
     id
     name
     age
-    class
+    className
     subjects
     attendance {
       date
@@ -238,7 +233,7 @@ mutation {
     input: {
       name: "John Updated"
       age: 31
-      class: "Senior Engineering"
+      className: "Senior Engineering"
       subjects: ["Java", "Spring Boot", "GraphQL", "Microservices"]
       email: "john.updated@example.com"
       phone: "9876543210"
@@ -315,7 +310,7 @@ query {
 
 1. **Import the provided Postman collection** (see below)
 2. **Set up environment variables**:
-    - `baseUrl`: http://localhost:8080
+    - `baseUrl`: http://localhost:8082
     - `token`: (will be set automatically after login)
 
 ### Postman Collection Structure
@@ -340,7 +335,7 @@ query {
 
 ### Sample Postman Request (REST-style for GraphQL)
 
-**Endpoint**: POST http://localhost:8080/graphql
+**Endpoint**: POST http://localhost:8082/graphql
 
 **Headers**:
 ```
@@ -356,25 +351,6 @@ Authorization: Bearer <your-token>
 ```
 
 ## 🐛 Troubleshooting
-
-### Database Connection Issues
-```bash
-# Check if PostgreSQL is running
-docker-compose ps
-
-# View logs
-docker-compose logs postgres
-```
-
-### Application Won't Start
-```bash
-# Check application logs
-docker-compose logs app
-
-# Rebuild containers
-docker-compose down
-docker-compose up --build
-```
 
 ### JWT Token Issues
 - Ensure the token is valid and not expired
