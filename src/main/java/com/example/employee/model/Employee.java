@@ -38,11 +38,13 @@ public class Employee {
     @Column(name = "class_name", nullable = false)
     private String className;
 
+    @Builder.Default
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "employee_subjects", joinColumns = @JoinColumn(name = "employee_id"))
     @Column(name = "subject")
     private List<String> subjects = new ArrayList<>();
 
+    @Builder.Default
     @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable(name = "employee_attendance", joinColumns = @JoinColumn(name = "employee_id"))
     @MapKeyColumn(name = "attendance_date")
