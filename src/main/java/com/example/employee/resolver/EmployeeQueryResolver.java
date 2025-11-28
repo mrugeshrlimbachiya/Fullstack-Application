@@ -107,23 +107,19 @@ public class EmployeeQueryResolver {
         employeeMap.put("id", employee.getId());
         employeeMap.put("name", employee.getName());
         employeeMap.put("age", employee.getAge());
-        employeeMap.put("class", employee.getClassName());
+        employeeMap.put("className", employee.getClassName());
         employeeMap.put("subjects", employee.getSubjects());
         employeeMap.put("email", employee.getEmail());
         employeeMap.put("phone", employee.getPhone());
-        employeeMap.put("createdAt", employee.getCreatedAt().toString());
-        employeeMap.put("updatedAt", employee.getUpdatedAt().toString());
 
-        List<Map<String, Object>> attendance = employee.getAttendance().entrySet().stream()
-                .map(entry -> {
-                    Map<String, Object> record = new HashMap<>();
-                    record.put("date", entry.getKey());
-                    record.put("present", entry.getValue());
-                    return record;
-                })
-                .collect(Collectors.toList());
+        // Handling null timestamps gracefully, as we did in the Mutation Resolver
+        employeeMap.put("createdAt", employee.getCreatedAt() != null ? employee.getCreatedAt().toString() : null);
+        employeeMap.put("updatedAt", employee.getUpdatedAt() != null ? employee.getUpdatedAt().toString() : null);
 
-        employeeMap.put("attendance", attendance);
+        // FIX: The Employee model now has a getAttendance() method that returns
+        // List<AttendanceRecord>. We rely on Spring GraphQL to serialize this List
+        // into the required List of Maps.
+        employeeMap.put("attendance", employee.getAttendance());
 
         return employeeMap;
     }

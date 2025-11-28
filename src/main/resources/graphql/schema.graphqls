@@ -27,7 +27,7 @@ type Employee {
     id: ID!
     name: String!
     age: Int!
-    class: String!
+    className: String!
     subjects: [String!]!
     attendance: [AttendanceRecord!]!
     email: String
@@ -70,7 +70,7 @@ type PageInfo {
 input EmployeeInput {
     name: String!
     age: Int!
-    class: String!
+    className: String!
     subjects: [String!]!
     email: String
     phone: String
@@ -80,7 +80,7 @@ input EmployeeFilter {
     name: String
     minAge: Int
     maxAge: Int
-    class: String
+    className: String
     subject: String
 }
 

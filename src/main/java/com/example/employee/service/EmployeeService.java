@@ -62,6 +62,8 @@ public class EmployeeService {
                 .subjects(input.getSubjects())
                 .email(input.getEmail())
                 .phone(input.getPhone())
+                // Ensure to initialize the attendanceData Map via the builder if not using @Builder.Default,
+                // though the model already handles the initialization.
                 .build();
 
         return employeeRepository.save(employee);
@@ -103,7 +105,21 @@ public class EmployeeService {
         log.info("Marking attendance for employee: {}, date: {}, present: {}", employeeId, date, present);
 
         Employee employee = getEmployeeById(employeeId);
-        employee.getAttendance().put(date, present);
+        // FIX: Call the getter for the raw JPA Map data: getAttendanceData().
+        // If the Employee model provided by you uses @Data, calling getAttendance()
+        // would technically work since Lombok generates it, but for clarity and
+        // robustness, we call the specific map getter, assuming you added
+        // 'getAttendanceData()' to your model as suggested.
+        // If you did NOT add 'getAttendanceData()', you should still call
+        // the default Lombok getter which accesses the map field.
+
+        // Assuming the underlying JPA field is now 'attendanceData'
+        // and you added 'getAttendanceData()':
+        // employee.getAttendanceData().put(date, present);
+
+        // Using the Lombok-generated getter for the original field name (which
+        // still points to the map field if you only renamed the field in the model):
+        employee.getAttendanceData().put(date, present); // Using the explicit Map getter
 
         return employeeRepository.save(employee);
     }

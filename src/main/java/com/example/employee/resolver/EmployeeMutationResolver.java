@@ -16,9 +16,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
+// Removed unused import: import java.util.List;
+// Removed unused import: import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor
@@ -27,6 +27,8 @@ public class EmployeeMutationResolver {
 
     private final EmployeeService employeeService;
     private final AuthService authService;
+
+    // ... (login and register mutations are unchanged) ...
 
     @MutationMapping
     public Map<String, Object> login(@Argument String username, @Argument String password) {
@@ -139,23 +141,20 @@ public class EmployeeMutationResolver {
         employeeMap.put("id", employee.getId());
         employeeMap.put("name", employee.getName());
         employeeMap.put("age", employee.getAge());
-        employeeMap.put("class", employee.getClassName());
+        // FIX: Corrected field name from "class" to "className" to match schema
+        employeeMap.put("className", employee.getClassName());
         employeeMap.put("subjects", employee.getSubjects());
         employeeMap.put("email", employee.getEmail());
         employeeMap.put("phone", employee.getPhone());
-        employeeMap.put("createdAt", employee.getCreatedAt().toString());
-        employeeMap.put("updatedAt", employee.getUpdatedAt().toString());
 
-        List<Map<String, Object>> attendance = employee.getAttendance().entrySet().stream()
-                .map(entry -> {
-                    Map<String, Object> record = new HashMap<>();
-                    record.put("date", entry.getKey());
-                    record.put("present", entry.getValue());
-                    return record;
-                })
-                .collect(Collectors.toList());
+        // Handling null timestamps gracefully
+        employeeMap.put("createdAt", employee.getCreatedAt() != null ? employee.getCreatedAt().toString() : null);
+        employeeMap.put("updatedAt", employee.getUpdatedAt() != null ? employee.getUpdatedAt().toString() : null);
 
-        employeeMap.put("attendance", attendance);
+        // FIX: Rely on the new getAttendance() method in the Employee model
+        // which now returns List<AttendanceRecord>.
+        // Spring GraphQL handles the List<Record> to List<Map> serialization.
+        employeeMap.put("attendance", employee.getAttendance());
 
         return employeeMap;
     }
