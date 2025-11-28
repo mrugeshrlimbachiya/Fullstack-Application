@@ -7,9 +7,12 @@ WORKDIR /app
 # Copy Gradle project files
 COPY build.gradle settings.gradle ./
 COPY gradle ./gradle
-COPY gradlew ./
+COPY gradlew ./gradlew
 
-# Pre-download dependencies (for faster incremental builds)
+# Fix permission issue
+RUN chmod +x gradlew
+
+# Pre-download dependencies (optional)
 RUN ./gradlew dependencies --no-daemon || return 0
 
 # Copy the source code
